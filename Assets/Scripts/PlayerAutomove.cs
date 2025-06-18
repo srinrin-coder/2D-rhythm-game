@@ -4,7 +4,7 @@ using UnityEngine;
 /// プレイヤーを自動で右に動かし、接地時のみジャンプさせるスクリプト（診断機能付き）
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(CapsuleCollider2D))]
 public class PlayerAutoMove : MonoBehaviour
 {
     [Header("移動設定")]
@@ -23,7 +23,7 @@ public class PlayerAutoMove : MonoBehaviour
 
     // --- プライベート変数 ---
     private Rigidbody2D rb;
-    private BoxCollider2D boxCollider;
+    private CapsuleCollider2D boxCollider;
     private bool isGrounded;
     private bool jumpRequested = false;
 
@@ -38,7 +38,7 @@ public class PlayerAutoMove : MonoBehaviour
 
         // 必要なコンポーネントを事前に取得
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<CapsuleCollider2D>();
     }
 
     void Start()
