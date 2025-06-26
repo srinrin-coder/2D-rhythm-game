@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CapsuleCollider2D))]
-public class PlayerController : MonoBehaviour
+public class MyPlayerController : MonoBehaviour
 {
     [Header("移動設定")]
     [Tooltip("プレイヤーの移動速度")]
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         // キャラクターの向きを右に固定するために、X方向のスケールを-1にする
-        transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+        transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
         // ★ 追加: ゲーム開始時の位置をスタート地点として記憶する
         startPosition = transform.position;
