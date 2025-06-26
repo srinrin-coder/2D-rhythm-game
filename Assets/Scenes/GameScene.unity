@@ -253,7 +253,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: 1, z: -10}
+  m_LocalPosition: {x: 14.963598, y: 1.76, z: -10.05447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 1314483873}
+    TrackingTarget: {fileID: 1238522487}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -352,7 +352,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 9, y: 1, z: -10}
+  FollowOffset: {x: 0, y: 1, z: -10}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,7 +712,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.963598, y: 0.76, z: -0.054470018}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -756,18 +756,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48608b6d955e8dc4caf294193cf9790e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 8
   jumpForce: 15
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   groundCheckDistance: 0.1
   deathY: -10
---- !u!4 &1314483873 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1593059018773690373, guid: b72bb8aa752a3f04d8a71ce9e93ae19c, type: 3}
-  m_PrefabInstance: {fileID: 9203525609469568423}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1624103194
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1473,6 +1468,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 473930397834356279, guid: b72bb8aa752a3f04d8a71ce9e93ae19c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1593059018773690373, guid: b72bb8aa752a3f04d8a71ce9e93ae19c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1517,6 +1516,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LightBandit
       objectReference: {fileID: 0}
+    - target: {fileID: 8521817683978383594, guid: b72bb8aa752a3f04d8a71ce9e93ae19c, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: f5622f267951f2640b09fbe369f4430f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
