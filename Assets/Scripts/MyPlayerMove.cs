@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// プレイヤーを自動で右に走らせ、ジャンプ・攻撃とアニメーションを制御するスクリプト
-/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CapsuleCollider2D))]
@@ -24,18 +21,16 @@ public class MyPlayerController : MonoBehaviour
 
     [Header("リスポーン設定")]
     [Tooltip("プレイヤーがリスポーンするY座標の高さ")]
-    [SerializeField] private float deathY = -10f;
+    [SerializeField] private float deathY = -15f;
 
-    // --- プライベート変数 ---
     private Rigidbody2D rb;
     private Animator animator;
     private CapsuleCollider2D boxCollider;
     private bool isGrounded;
-    private Vector3 startPosition; // スタート地点を記憶する変数
+    private Vector3 startPosition;
 
     void Awake()
     {
-        // 必要なコンポーネントを事前に取得
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<CapsuleCollider2D>();
@@ -43,71 +38,48 @@ public class MyPlayerController : MonoBehaviour
 
     void Start()
     {
-        // キャラクターの向きを右に固定するために、X方向のスケールを-1にする
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-
-        // ★ 追加: ゲーム開始時の位置をスタート地点として記憶する
         startPosition = transform.position;
     }
 
     void Update()
     {
-        // 接地判定を毎フレーム実行
         CheckIfGrounded();
-        animator.SetBool("Grounded", isGrounded); // ジャンプと落下の判定用にGrounded状態をAnimatorに渡す
+        animator.SetBool("Grounded", isGrounded);
 
-        // 接地している時にスペースキーが押されたらジャンプする
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
 
-        // Kキーが押されたら攻撃する
         if (Input.GetKeyDown(KeyCode.K))
         {
             Attack();
         }
 
-        // ★ 追加: もしプレイヤーが一定の高さより下に落ちたらリスポーンする
         if (transform.position.y < deathY)
         {
             Respawn();
         }
-
     }
 
     void FixedUpdate()
     {
-        // 物理演算の更新はこちら
-        // x軸（横）方向は常に moveSpeed で移動し、y軸（縦）方向の速度は物理演算に任せる
         rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
     }
 
-    /// <summary>
-    /// ジャンプ処理
-    /// </summary>
     private void Jump()
     {
-        // 上方向に力を加える
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-
-        // Animatorに「JumpTrigger」の合図を送る
         animator.SetTrigger("JumpTrigger");
     }
 
-    /// <summary>
-    /// 攻撃処理
-    /// </summary>
     private void Attack()
     {
-        // Animatorに「AttackTrigger」の合図を送る
         animator.SetTrigger("AttackTrigger");
     }
 
-    /// <summary>
-    /// BoxCastを使って接地しているか判定する
-    /// </summary>
     private void CheckIfGrounded()
     {
         Vector2 castOrigin = boxCollider.bounds.center;
@@ -118,13 +90,9 @@ public class MyPlayerController : MonoBehaviour
         isGrounded = hit.collider != null;
     }
     
-    // ★ 追加: リスポーン処理
     private void Respawn()
     {
-        // プレイヤーの位置を記憶しておいたスタート地点に戻す
         transform.position = startPosition;
-        // 落下速度をリセットする（重要）
         rb.linearVelocity = Vector2.zero;
     }
-
 }
