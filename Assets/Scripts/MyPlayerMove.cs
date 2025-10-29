@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
@@ -23,11 +25,21 @@ public class MyPlayerController : MonoBehaviour
     [Tooltip("プレイヤーがリスポーンするY座標の高さ")]
     [SerializeField] private float deathY = -15f;
 
+    public static event Action OnPlayerRespawn;
     private Rigidbody2D rb;
     private Animator animator;
     private CapsuleCollider2D boxCollider;
     private bool isGrounded;
     private Vector3 startPosition;
+
+    private void Respawn()
+    {
+        transform.position = startPosition;
+        rb.linearVelocity = Vector2.zero;
+        Debug.Log("【プレイヤー】リスポーンします。イベントを発行（通知）します。");
+
+        OnPlayerRespawn?.Invoke();
+    }
 
     void Awake()
     {
@@ -45,7 +57,7 @@ public class MyPlayerController : MonoBehaviour
     void Update()
     {
         CheckIfGrounded();
-        animator.SetBool("Grounded", isGrounded);
+        animator.SetBool("Ground", isGrounded);
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
@@ -90,9 +102,4 @@ public class MyPlayerController : MonoBehaviour
         isGrounded = hit.collider != null;
     }
     
-    private void Respawn()
-    {
-        transform.position = startPosition;
-        rb.linearVelocity = Vector2.zero;
-    }
 }
