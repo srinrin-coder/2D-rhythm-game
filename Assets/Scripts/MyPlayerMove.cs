@@ -5,7 +5,7 @@ using System;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CapsuleCollider2D))]
-public class MyPlayerController : MonoBehaviour
+public class MyPlayerMove : MonoBehaviour
 {
     [Header("移動設定")]
     [Tooltip("プレイヤーの移動速度")]
@@ -36,7 +36,7 @@ public class MyPlayerController : MonoBehaviour
     {
         transform.position = startPosition;
         rb.linearVelocity = Vector2.zero;
-        Debug.Log("【プレイヤー】リスポーンします。イベントを発行（通知）します。");
+        //Debug.Log("【プレイヤー】リスポーンします。イベントを発行（通知）します。");
 
         OnPlayerRespawn?.Invoke();
     }
