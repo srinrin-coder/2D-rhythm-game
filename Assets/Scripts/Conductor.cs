@@ -55,19 +55,17 @@ public class Conductor : MonoBehaviour
         StartSong();
     }
 
-    /// <summary>
-    /// 曲の再生を開始（または予約）する
-    /// </summary>
     private void StartSong()
     {
-        // 現在の原子時計の時間 + 待機時間 を開始時刻とする
+        // 現在のDSP時間 + 待機時間 を開始時刻とする
         dspStartTime = AudioSettings.dspTime + startDelay;
         
         // 音声の再生予約
         musicSource.PlayScheduled(dspStartTime);
         
         isPlaying = true;
-        lastSmoothedTime = -startDelay; // 時間管理変数のリセット
+        // 時間変数をリセット（マイナスからスタートさせる）
+        lastSmoothedTime = -startDelay; 
     }
 
     /// <summary>
@@ -79,7 +77,6 @@ public class Conductor : MonoBehaviour
         musicSource.Stop();
 
         // 2. 過去の統計データ（回帰分析用）をクリアする
-        // これをやらないと「過去の時間」に引きずられて計算がおかしくなる
         gameTimeHistory.Clear();
         dspTimeHistory.Clear();
 
@@ -134,12 +131,13 @@ public class Conductor : MonoBehaviour
 
     public double GetSongPosition()
     {
-        if (!isPlaying) return -startDelay; // 再生前はマイナス時間を返す
+        // 再生していない、またはConductorが初期化前の場合は安全に待機時間を返す
+        if (!isPlaying) return -startDelay;
 
         // 予測DSP時間の計算
         double estimatedDspTime = (Time.unscaledTimeAsDouble * slope) + intercept;
 
-        // 時間逆行防止（リスタート時はリセットされているので問題ない）
+        // 時間逆行防止
         if (estimatedDspTime < lastSmoothedTime)
         {
             estimatedDspTime = lastSmoothedTime;

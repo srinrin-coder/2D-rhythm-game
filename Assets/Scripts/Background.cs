@@ -5,50 +5,58 @@ public class Background : MonoBehaviour
     [SerializeField]
     float scrollSpeed = -1;
 
-    // 新規追加: 背景1枚のワールド空間での幅を保持します。
     private float backgroundWidth;
     private Vector3 startPosition;
 
-
     void Start()
     {
-
         startPosition = transform.position;
-        //Debug.Log("【背景】イベント購読を開始します。初期位置: " + startPosition, this.gameObject);
-
-        // 【重要】アタッチされているSpriteRendererから、背景画像の実際のワールド幅を取得します。
+        
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
             backgroundWidth = spriteRenderer.bounds.size.x;
         }
-        else
-        {
-            Debug.LogError("背景オブジェクトにSpriteRendererがアタッチされていません。");
-        }
 
+        // イベント購読は念のため残しておきますが、基本はUpdateで制御します
         MyPlayerMove.OnPlayerRespawn += ResetPosition;
     }
 
     void OnDestroy()
     {
-        //Debug.Log("【背景】イベント購読を解除します。", this.gameObject);
         MyPlayerMove.OnPlayerRespawn -= ResetPosition;
     }
 
     public void ResetPosition()
     {
-        //Debug.Log("【背景】リスポーン通知を受け取りました。位置を " + startPosition + " にリセットします。", this.gameObject);
         transform.position = startPosition;
     }
 
     void Update()
     {
-        Move();
+        MoveSynchronized();
     }
 
-    void Move()
+    void MoveSynchronized()
     {
-        transform.Translate(Vector3.right * scrollSpeed * Time.deltaTime);
+        if (Conductor.Instance == null) return;
+
+        double songPosition = Conductor.Instance.GetSongPosition();
+        
+        // --- 修正点 ---
+        // 時間がマイナス（リスタート直後）の場合、強制的に初期位置へ固定
+        // これにより、イベントのResetPositionと二重になっても問題なく、
+        // むしろフレームの更新順序によるズレを完全に防げます。
+        if (songPosition < 0) 
+        {
+             transform.position = startPosition;
+             return;
+        }
+
+        // 通常のスクロール計算
+        float totalOffset = (float)(songPosition * scrollSpeed);
+        float newX = startPosition.x + totalOffset;
+        
+        transform.position = new Vector3(newX, startPosition.y, startPosition.z);
     }
 }
