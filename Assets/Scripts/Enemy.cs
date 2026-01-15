@@ -17,6 +17,6 @@ public class Enemy : MonoBehaviour
         }
 
         // 自分自身を削除（消滅）
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 }

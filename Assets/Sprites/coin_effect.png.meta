@@ -90,7 +90,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -168,210 +168,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: effect2_0
+      name: coin_effect_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 20
-        width: 61
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 51bbe3affd8c6ac90800000000000000
-      internalID: -7158813693357147371
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_1
-      rect:
-        serializedVersion: 2
-        x: 117
-        y: 19
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1d256da6dee03fb00800000000000000
-      internalID: 861048366620365521
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_2
-      rect:
-        serializedVersion: 2
-        x: 165
-        y: 17
-        width: 19
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9aa2b6d486745ce60800000000000000
-      internalID: 7981864427885111977
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_3
-      rect:
-        serializedVersion: 2
-        x: 213
-        y: 15
-        width: 23
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cbef7217915b955d0800000000000000
-      internalID: -3073226149826396484
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_4
-      rect:
-        serializedVersion: 2
-        x: 263
-        y: 19
-        width: 13
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: af74323f974fa7e30800000000000000
-      internalID: 4502179582117627898
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_5
-      rect:
-        serializedVersion: 2
-        x: 271
-        y: 23
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: acaf28a5a6b87c820800000000000000
-      internalID: 2938470570783865546
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_6
-      rect:
-        serializedVersion: 2
-        x: 273
-        y: 15
-        width: 13
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5d7e276c2fcdeb7a0800000000000000
-      internalID: -6359402688530946091
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_7
-      rect:
-        serializedVersion: 2
-        x: 313
-        y: 15
-        width: 57
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c003d81f6c6024a80800000000000000
-      internalID: -8484211296486739956
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_8
-      rect:
-        serializedVersion: 2
-        x: 377
-        y: 15
-        width: 9
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 789bd768c3b2a3790800000000000000
-      internalID: -7549674286378796665
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: effect2_9
-      rect:
-        serializedVersion: 2
-        x: 412
+        x: 14
         y: 16
-        width: 7
+        width: 21
         height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -379,21 +181,21 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dffb5e6f314bb5670800000000000000
-      internalID: 8528608317195796477
+      spriteID: 7dabb05e752d05a4e83f85d253039a69
+      internalID: 1722673839
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: effect2_10
+      name: coin_effect_1
       rect:
         serializedVersion: 2
-        x: 429
-        y: 15
-        width: 57
+        x: 64
+        y: 16
+        width: 21
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -401,87 +203,87 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2a33e8c72876a8ec0800000000000000
-      internalID: -3563922344977222750
+      spriteID: 905d9b9bf4a6095479044dfd5cd42d13
+      internalID: 1980521188
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: effect2_11
+      name: coin_effect_2
       rect:
         serializedVersion: 2
-        x: 512
-        y: 14
-        width: 7
-        height: 7
+        x: 115
+        y: 16
+        width: 20
+        height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d26c38f507feaeb20800000000000000
-      internalID: 3164604954099041837
+      spriteID: 8486df0716604694ab7f648740d63aef
+      internalID: 471438151
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: effect2_12
+      name: coin_effect_3
       rect:
         serializedVersion: 2
-        x: 529
-        y: 29
-        width: 7
-        height: 7
+        x: 165
+        y: 18
+        width: 19
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2df25a98151f291f0800000000000000
-      internalID: -1039503231465213998
+      spriteID: 0a42f69f9a1e6524eae0dcfd9ae45576
+      internalID: -1488321482
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: effect2_13
+      name: coin_effect_4
       rect:
         serializedVersion: 2
-        x: 562
-        y: 14
-        width: 7
-        height: 7
+        x: 213
+        y: 17
+        width: 22
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 58297f5401223be00800000000000000
-      internalID: 1059227790650872453
+      spriteID: 7eb54b79505485549a5457d003abce58
+      internalID: -72432397
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: effect2_14
+      name: coin_effect_5
       rect:
         serializedVersion: 2
-        x: 579
-        y: 14
-        width: 57
+        x: 264
+        y: 15
+        width: 22
         height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -489,10 +291,164 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 62a2c8ad388a40dd0800000000000000
-      internalID: -2520704607159834074
+      spriteID: e494f6a35993eaf439ec2cb7dd6c26bf
+      internalID: 1056674009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_effect_6
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 15
+        width: 23
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cedb73921d4169347a1b5efbf4f66235
+      internalID: -1008640039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_effect_7
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 14
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4767f35b6e1fae429b65355e82ce485
+      internalID: -1743577461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_effect_8
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 15
+        width: 23
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e201fe0eaa2e35242adc993d965dbb05
+      internalID: -1682060801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_effect_9
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 14
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 954bc4a158d473243ab165aef1b9dfe2
+      internalID: -1482977448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_effect_10
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 14
+        width: 23
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86fa3e4becc21314ea6cbaeb72d80532
+      internalID: -1926923065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_effect_11
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 14
+        width: 23
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b90d1ea02b2d21040b401a9cae5bc09a
+      internalID: 1952343183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_effect_12
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 13
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd99508ee39537d41b7c0b6ece505ef8
+      internalID: 1920286080
       vertices: []
       indices: 
       edges: []
@@ -501,7 +457,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: a6369f9b630a61f46a1a6da09cc434bd
     internalID: 0
     vertices: []
     indices: 
@@ -511,6 +467,19 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+      coin_effect_0: 1722673839
+      coin_effect_1: 1980521188
+      coin_effect_10: -1926923065
+      coin_effect_11: 1952343183
+      coin_effect_12: 1920286080
+      coin_effect_2: 471438151
+      coin_effect_3: -1488321482
+      coin_effect_4: -72432397
+      coin_effect_5: 1056674009
+      coin_effect_6: -1008640039
+      coin_effect_7: -1743577461
+      coin_effect_8: -1682060801
+      coin_effect_9: -1482977448
       effect2_0: -7158813693357147371
       effect2_1: 861048366620365521
       effect2_10: -3563922344977222750

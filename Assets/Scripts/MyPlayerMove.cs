@@ -34,6 +34,10 @@ public class MyPlayerMove : MonoBehaviour
     [SerializeField] private AudioClip jumpSfx;
     [Tooltip("攻撃ヒット音")]
     [SerializeField] private AudioClip attackHitSfx;
+    
+    // --- 追加: コイン取得音 ---
+    [Tooltip("コイン取得音")]
+    [SerializeField] private AudioClip coinSfx;
 
     [Header("その他")]
     [SerializeField] private LayerMask groundLayer;
@@ -47,7 +51,7 @@ public class MyPlayerMove : MonoBehaviour
     private CapsuleCollider2D boxCollider;
     private bool isGrounded;
     
-    // オーディオプール（ジャンプと攻撃が重なってもいいように数を4に増やす）
+    // オーディオプール（ジャンプ・攻撃・コインが重なってもいいように余裕を持つ）
     private AudioSource[] sfxSources;
     private int currentSfxIndex = 0;
 
@@ -61,7 +65,7 @@ public class MyPlayerMove : MonoBehaviour
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<CapsuleCollider2D>();
         
-        // 低遅延再生用スピーカーを4つ用意（ジャンプ、攻撃連打に対応）
+        // 低遅延再生用スピーカーを4つ用意
         sfxSources = new AudioSource[4];
         for (int i = 0; i < sfxSources.Length; i++)
         {
@@ -142,6 +146,10 @@ public class MyPlayerMove : MonoBehaviour
             Attack();
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Respawn();
+        }
         if (transform.position.y < deathY)
         {
             Respawn();
@@ -176,17 +184,13 @@ public class MyPlayerMove : MonoBehaviour
     {
         animator.SetTrigger("AttackTrigger");
 
-        // --- 攻撃判定の処理 ---
-        // プレイヤーの位置 + オフセット（前方）を中心に円形の判定を出す
+        // 攻撃判定
         Vector2 attackPos = (Vector2)transform.position + attackOffset;
-        
-        // 指定したレイヤー（Enemy）のみを検出
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPos, attackRadius, enemyLayer);
 
         bool hitAny = false;
         foreach (Collider2D hit in hitEnemies)
         {
-            // 当たった相手が Enemyスクリプトを持っていれば倒す
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null)
             {
@@ -195,11 +199,20 @@ public class MyPlayerMove : MonoBehaviour
             }
         }
 
-        // 敵に当たったら音を鳴らす（空振りでは鳴らさない仕様にしています。好みで変えてください）
         if (hitAny)
         {
             PlayLowLatencySfx(attackHitSfx);
         }
+    }
+
+    // --- 追加: コイン取得処理 ---
+    /// <summary>
+    /// コイン側から呼ばれる関数。音を鳴らす。
+    /// </summary>
+    public void GetCoin()
+    {
+        PlayLowLatencySfx(coinSfx);
+        // 必要であればここでスコア加算処理なども呼ぶ
     }
 
     /// <summary>
@@ -213,7 +226,6 @@ public class MyPlayerMove : MonoBehaviour
         source.clip = clip;
         source.PlayScheduled(AudioSettings.dspTime);
         
-        // インデックスを回す（0 -> 1 -> 2 -> 3 -> 0...）
         currentSfxIndex = (currentSfxIndex + 1) % sfxSources.Length;
     }
 
@@ -227,7 +239,6 @@ public class MyPlayerMove : MonoBehaviour
         isGrounded = hit.collider != null;
     }
 
-    // エディタ上で攻撃範囲を可視化（デバッグ用）
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
