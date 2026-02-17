@@ -138,10 +138,10 @@ TextureImporter:
       name: JumpPoint-Sheet_0
       rect:
         serializedVersion: 2
-        x: 32
-        y: 40
-        width: 33
-        height: 12
+        x: 30
+        y: 49
+        width: 62
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,10 +160,10 @@ TextureImporter:
       name: JumpPoint-Sheet_1
       rect:
         serializedVersion: 2
-        x: 132
-        y: 40
-        width: 33
-        height: 12
+        x: 158
+        y: 49
+        width: 62
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,10 +182,10 @@ TextureImporter:
       name: JumpPoint-Sheet_2
       rect:
         serializedVersion: 2
-        x: 232
-        y: 40
-        width: 33
-        height: 12
+        x: 286
+        y: 49
+        width: 62
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -204,10 +204,10 @@ TextureImporter:
       name: JumpPoint-Sheet_3
       rect:
         serializedVersion: 2
-        x: 332
-        y: 40
-        width: 33
-        height: 12
+        x: 414
+        y: 49
+        width: 62
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
