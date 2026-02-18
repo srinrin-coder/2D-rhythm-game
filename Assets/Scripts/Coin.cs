@@ -40,6 +40,7 @@ public class Coin : MonoBehaviour
         {
             // 1. プレイヤーに「コインを拾ったぞ」と伝える
             player.GetCoin();
+            GameManager.Instance.AddScore(100);
 
             // 2. エフェクトがあれば出す（エフェクトは使い捨てなので生成してOK）
             if (pickupEffect != null)

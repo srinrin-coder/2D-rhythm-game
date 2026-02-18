@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void OnDefeated()
     {
+        GameManager.Instance.AddScore(500);
         // エフェクトがあれば生成
         if (deathEffect != null)
         {
