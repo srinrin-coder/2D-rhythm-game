@@ -35,7 +35,6 @@ public class MyPlayerMove : MonoBehaviour
     [Tooltip("攻撃ヒット音")]
     [SerializeField] private AudioClip attackHitSfx;
     
-    // --- 追加: コイン取得音 ---
     [Tooltip("コイン取得音")]
     [SerializeField] private AudioClip coinSfx;
 
@@ -51,7 +50,7 @@ public class MyPlayerMove : MonoBehaviour
     private CapsuleCollider2D boxCollider;
     private bool isGrounded;
     
-    // オーディオプール（ジャンプ・攻撃・コインが重なってもいいように余裕を持つ）
+    // オーディオプール
     private AudioSource[] sfxSources;
     private int currentSfxIndex = 0;
 
@@ -118,10 +117,20 @@ public class MyPlayerMove : MonoBehaviour
         calculatedJumpVelocity = (float)initialVelocity;
     }
 
+    /// <summary>
+    /// ゲームをリセットして初期位置に戻す処理
+    /// </summary>
     private void Respawn()
     {
         rb.linearVelocity = Vector2.zero;
         transform.position = initialSpawnPosition;
+
+        // --- 追加: GameManagerにスコアのリセットを依頼 ---
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ResetScore();
+        }
+        // ---------------------------------------------
 
         if (Conductor.Instance != null)
         {
@@ -136,20 +145,25 @@ public class MyPlayerMove : MonoBehaviour
         CheckIfGrounded();
         animator.SetBool("Ground", isGrounded);
 
+        // ジャンプ
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
 
+        // 攻撃
         if (Input.GetKeyDown(KeyCode.K))
         {
             Attack();
         }
 
+        // --- 追加: Rキーでいつでもリトライ ---
         if (Input.GetKeyDown(KeyCode.R))
         {
             Respawn();
         }
+
+        // 落下判定
         if (transform.position.y < deathY)
         {
             Respawn();
@@ -184,7 +198,6 @@ public class MyPlayerMove : MonoBehaviour
     {
         animator.SetTrigger("AttackTrigger");
 
-        // 攻撃判定
         Vector2 attackPos = (Vector2)transform.position + attackOffset;
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPos, attackRadius, enemyLayer);
 
@@ -205,19 +218,11 @@ public class MyPlayerMove : MonoBehaviour
         }
     }
 
-    // --- 追加: コイン取得処理 ---
-    /// <summary>
-    /// コイン側から呼ばれる関数。音を鳴らす。
-    /// </summary>
     public void GetCoin()
     {
         PlayLowLatencySfx(coinSfx);
-        // 必要であればここでスコア加算処理なども呼ぶ
     }
 
-    /// <summary>
-    /// 低遅延でSEを再生する共通メソッド
-    /// </summary>
     private void PlayLowLatencySfx(AudioClip clip)
     {
         if (clip == null) return;
