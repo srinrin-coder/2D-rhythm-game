@@ -4,6 +4,7 @@ using System.Linq;
 
 /// <summary>
 /// 楽曲の再生と、映像フレームレートに依存しない「正確かつ滑らかな時間」を管理するクラス。
+/// 途中再生機能（Debug Start Beat）と停止機能（Stop）を追加。
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class Conductor : MonoBehaviour
@@ -20,19 +21,25 @@ public class Conductor : MonoBehaviour
     [Tooltip("オーディオのレイテンシー補正（秒）。")]
     public double audioLatency = 0.0;
 
+    [Header("デバッグ")]
+    [Tooltip("指定した拍数からゲームを開始します（0なら最初から）。配置確認に便利です。")]
+    public float debugStartBeat = 0f;
+
     private const int RegressionBufferSize = 15;
 
     private AudioSource musicSource;
     private double dspStartTime;
-    private bool isPlaying = false;
+    
+    // --- 変更: 外部から状態を確認できるようにプロパティ化 ---
+    public bool IsPlaying { get; private set; } = false;
+    // ----------------------------------------------------
 
-    // 線形回帰用バッファ
+    // 線形回帰用バッファ（滑らかな動きを実現するため）
     private Queue<double> gameTimeHistory = new Queue<double>();
     private Queue<double> dspTimeHistory = new Queue<double>();
     
     private double slope = 1.0;
     private double intercept = 0.0;
-    private double lastSmoothedTime = 0.0;
 
     void Awake()
     {
@@ -47,51 +54,89 @@ public class Conductor : MonoBehaviour
         }
 
         musicSource = GetComponent<AudioSource>();
-        musicSource.playOnAwake = false;
     }
 
     void Start()
     {
-        StartSong();
-    }
-
-    private void StartSong()
-    {
-        // 現在のDSP時間 + 待機時間 を開始時刻とする
-        dspStartTime = AudioSettings.dspTime + startDelay;
-        
-        // 音声の再生予約
-        musicSource.PlayScheduled(dspStartTime);
-        
-        isPlaying = true;
-        // 時間変数をリセット（マイナスからスタートさせる）
-        lastSmoothedTime = -startDelay; 
+        Play();
     }
 
     /// <summary>
-    /// ゲームオーバー時などに曲を最初からやり直す機能
+    /// 曲を再生する
+    /// </summary>
+    public void Play()
+    {
+        if (musicSource == null) return;
+
+        musicSource.Stop();
+        
+        // 開始位置（秒）の計算
+        double seekTime = 0;
+        if (debugStartBeat > 0)
+        {
+            seekTime = debugStartBeat * (60.0 / bpm);
+        }
+
+        if (seekTime > 0)
+        {
+            // --- 途中から再生する場合 ---
+            // 待ち時間なしで即時再生します
+            musicSource.time = (float)seekTime;
+            musicSource.Play();
+
+            // 「今」が「シーク位置」になるように基準時間を逆算して設定
+            dspStartTime = AudioSettings.dspTime - seekTime;
+        }
+        else
+        {
+            // --- 最初から再生する場合 ---
+            // 少し遅延（StartDelay）を入れて再生予約します
+            musicSource.time = 0;
+            musicSource.PlayScheduled(AudioSettings.dspTime + startDelay);
+            
+            // 基準時間は「StartDelay秒後」に設定
+            dspStartTime = AudioSettings.dspTime + startDelay;
+        }
+
+        IsPlaying = true;
+        
+        // 回帰分析用の履歴をクリア
+        gameTimeHistory.Clear();
+        dspTimeHistory.Clear();
+    }
+
+    /// <summary>
+    /// リトライ時などに呼ばれる
     /// </summary>
     public void Restart()
     {
-        // 1. 曲を止める
-        musicSource.Stop();
-
-        // 2. 過去の統計データ（回帰分析用）をクリアする
-        gameTimeHistory.Clear();
-        dspTimeHistory.Clear();
-
-        // 3. 再度スケジュールして再生
-        StartSong();
+        // デバッグ設定が残っていれば、リトライ時もその場所から再開します
+        Play();
     }
+
+    // --- 追加: 曲を停止する機能 ---
+    /// <summary>
+    /// 曲を停止し、進行を止める
+    /// </summary>
+    public void Stop()
+    {
+        if (musicSource != null)
+        {
+            musicSource.Stop();
+        }
+        IsPlaying = false;
+    }
+    // ----------------------------
 
     void Update()
     {
-        if (!isPlaying) return;
+        if (!IsPlaying) return;
 
+        // 現在のオーディオ時間（DSP Time）
         double currentDspTime = AudioSettings.dspTime;
-        double currentGameTime = Time.unscaledTimeAsDouble;
-
-        gameTimeHistory.Enqueue(currentGameTime);
+        
+        // ゲーム時間（Time.time）との相関を取るためのデータを蓄積
+        gameTimeHistory.Enqueue(Time.time);
         dspTimeHistory.Enqueue(currentDspTime);
 
         if (gameTimeHistory.Count > RegressionBufferSize)
@@ -103,6 +148,9 @@ public class Conductor : MonoBehaviour
         CalculateLinearRegression();
     }
 
+    /// <summary>
+    /// カクつき防止のため、オーディオ時間とゲーム時間の相関関係を計算する
+    /// </summary>
     private void CalculateLinearRegression()
     {
         if (gameTimeHistory.Count < 2) return;
@@ -129,22 +177,23 @@ public class Conductor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 現在の曲の位置（秒）を取得
+    /// </summary>
     public double GetSongPosition()
     {
-        // 再生していない、またはConductorが初期化前の場合は安全に待機時間を返す
-        if (!isPlaying) return -startDelay;
+        if (!IsPlaying) return -startDelay;
 
-        // 予測DSP時間の計算
-        double estimatedDspTime = (Time.unscaledTimeAsDouble * slope) + intercept;
-
-        // 時間逆行防止
-        if (estimatedDspTime < lastSmoothedTime)
+        // 線形回帰を使って、フレーム変動に強い滑らかな時刻を取得
+        double smoothDspTime = (slope * Time.time) + intercept;
+        
+        // データが溜まるまでは生のDSPタイムを使う
+        if (gameTimeHistory.Count < 2)
         {
-            estimatedDspTime = lastSmoothedTime;
+            smoothDspTime = AudioSettings.dspTime;
         }
-        lastSmoothedTime = estimatedDspTime;
 
-        // 曲位置 = 現在時刻 - 開始時刻 - 補正
-        return estimatedDspTime - dspStartTime - audioLatency;
+        // 曲の位置 = (現在時刻 - 再生開始基準時刻) - レイテンシー
+        return smoothDspTime - dspStartTime - audioLatency;
     }
 }

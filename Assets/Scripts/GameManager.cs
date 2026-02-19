@@ -33,8 +33,6 @@ public class GameManager : MonoBehaviour
         // ESCキーが押されたらタイトルに戻る
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // 必要に応じて確認ダイアログなどを出すこともできますが、
-            // 今回は即座にタイトルへ戻る挙動にします。
             BackToTitle();
         }
     }
@@ -51,6 +49,12 @@ public class GameManager : MonoBehaviour
     {
         currentScore = 0;
         isGameFinished = false;
+        
+        // リセット時にスコア表示を復活させる
+        if (scoreText != null) 
+        {
+            scoreText.gameObject.SetActive(true);
+        }
         UpdateScoreUI();
         
         if (clearUI != null) clearUI.SetActive(false);
@@ -69,9 +73,15 @@ public class GameManager : MonoBehaviour
         // 音楽を停止
         if (Conductor.Instance != null)
         {
-            AudioSource music = Conductor.Instance.GetComponent<AudioSource>();
-            if (music != null) music.Stop();
+            Conductor.Instance.Stop();
         }
+
+        // --- 追加: ゲーム画面のスコア表示を消す ---
+        if (scoreText != null)
+        {
+            scoreText.gameObject.SetActive(false);
+        }
+        // ----------------------------------------
 
         if (clearUI != null) clearUI.SetActive(true);
         if (finalScoreText != null) finalScoreText.text = $"FINAL SCORE: {currentScore}";
@@ -79,7 +89,6 @@ public class GameManager : MonoBehaviour
 
     public void BackToTitle()
     {
-        // Build Settings で "TitleScene" が登録されている必要があります
         SceneManager.LoadScene("TitleScene");
     }
 

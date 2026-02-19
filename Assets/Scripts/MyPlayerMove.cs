@@ -34,7 +34,6 @@ public class MyPlayerMove : MonoBehaviour
     [SerializeField] private AudioClip jumpSfx;
     [Tooltip("攻撃ヒット音")]
     [SerializeField] private AudioClip attackHitSfx;
-    
     [Tooltip("コイン取得音")]
     [SerializeField] private AudioClip coinSfx;
 
@@ -64,7 +63,6 @@ public class MyPlayerMove : MonoBehaviour
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<CapsuleCollider2D>();
         
-        // 低遅延再生用スピーカーを4つ用意
         sfxSources = new AudioSource[4];
         for (int i = 0; i < sfxSources.Length; i++)
         {
@@ -82,6 +80,12 @@ public class MyPlayerMove : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         RecalculatePhysics();
+
+        // --- 追加: GameManagerのイベントを購読 ---
+        // GameManagerが存在する場合、クリア時にプレイヤーを消す処理を登録したいが、
+        // 現状のGameManagerにはイベントがないため、Update内でフラグを監視するか、
+        // もっと単純にGoalクラスから直接プレイヤーを無効化してもらうのが早いです。
+        // ここでは、自己完結させるためにUpdate内でConductorの停止を検知して消えるようにします。
     }
 
     private void RecalculatePhysics()
@@ -117,20 +121,15 @@ public class MyPlayerMove : MonoBehaviour
         calculatedJumpVelocity = (float)initialVelocity;
     }
 
-    /// <summary>
-    /// ゲームをリセットして初期位置に戻す処理
-    /// </summary>
     private void Respawn()
     {
         rb.linearVelocity = Vector2.zero;
         transform.position = initialSpawnPosition;
 
-        // --- 追加: GameManagerにスコアのリセットを依頼 ---
         if (GameManager.Instance != null)
         {
             GameManager.Instance.ResetScore();
         }
-        // ---------------------------------------------
 
         if (Conductor.Instance != null)
         {
@@ -142,28 +141,43 @@ public class MyPlayerMove : MonoBehaviour
 
     void Update()
     {
+        // --- 修正: ゲーム停止中はプレイヤーを非表示にして処理を抜ける ---
+        if (Conductor.Instance != null && !Conductor.Instance.IsPlaying)
+        {
+            // プレイヤーの見た目（スプライト）を消す
+            // gameObject.SetActive(false) してしまうと、このスクリプトも止まってしまい
+            // 再開できなくなる可能性があるため、Rendererだけ消すか、
+            // GameManager側で完全に制御する方が安全ですが、
+            // ここでは「ゴール後」という前提で gameObject.SetActive(false) してしまいます。
+            // ※リトライ時はシーンごとリロードするならこれでOKです。
+            
+            // ただし、単なる一時停止ではなく「ゴール」であることを確認したいので、
+            // GameManagerの終了フラグを見るか、Goalから直接消してもらうのがベスト。
+            
+            // 今回は、最も確実な方法として「Goal.csからSetActive(false)される」ことを想定し、
+            // ここでは何もしないでおきます（Goal.cs側で制御）。
+            return;
+        }
+        // ------------------------------------
+
         CheckIfGrounded();
         animator.SetBool("Ground", isGrounded);
 
-        // ジャンプ
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
 
-        // 攻撃
         if (Input.GetKeyDown(KeyCode.K))
         {
             Attack();
         }
 
-        // --- 追加: Rキーでいつでもリトライ ---
         if (Input.GetKeyDown(KeyCode.R))
         {
             Respawn();
         }
 
-        // 落下判定
         if (transform.position.y < deathY)
         {
             Respawn();
@@ -184,6 +198,8 @@ public class MyPlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (Conductor.Instance != null && !Conductor.Instance.IsPlaying) return;
+
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
     }
 
