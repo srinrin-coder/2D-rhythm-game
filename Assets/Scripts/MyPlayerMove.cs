@@ -80,12 +80,6 @@ public class MyPlayerMove : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         RecalculatePhysics();
-
-        // --- 追加: GameManagerのイベントを購読 ---
-        // GameManagerが存在する場合、クリア時にプレイヤーを消す処理を登録したいが、
-        // 現状のGameManagerにはイベントがないため、Update内でフラグを監視するか、
-        // もっと単純にGoalクラスから直接プレイヤーを無効化してもらうのが早いです。
-        // ここでは、自己完結させるためにUpdate内でConductorの停止を検知して消えるようにします。
     }
 
     private void RecalculatePhysics()
@@ -141,24 +135,10 @@ public class MyPlayerMove : MonoBehaviour
 
     void Update()
     {
-        // --- 修正: ゲーム停止中はプレイヤーを非表示にして処理を抜ける ---
         if (Conductor.Instance != null && !Conductor.Instance.IsPlaying)
         {
-            // プレイヤーの見た目（スプライト）を消す
-            // gameObject.SetActive(false) してしまうと、このスクリプトも止まってしまい
-            // 再開できなくなる可能性があるため、Rendererだけ消すか、
-            // GameManager側で完全に制御する方が安全ですが、
-            // ここでは「ゴール後」という前提で gameObject.SetActive(false) してしまいます。
-            // ※リトライ時はシーンごとリロードするならこれでOKです。
-            
-            // ただし、単なる一時停止ではなく「ゴール」であることを確認したいので、
-            // GameManagerの終了フラグを見るか、Goalから直接消してもらうのがベスト。
-            
-            // 今回は、最も確実な方法として「Goal.csからSetActive(false)される」ことを想定し、
-            // ここでは何もしないでおきます（Goal.cs側で制御）。
             return;
         }
-        // ------------------------------------
 
         CheckIfGrounded();
         animator.SetBool("Ground", isGrounded);
@@ -182,6 +162,14 @@ public class MyPlayerMove : MonoBehaviour
         {
             Respawn();
         }
+
+        // --- 追加: 壁（タイルの側面）にぶつかったらミスにする ---
+        if (CheckWallCollision())
+        {
+            Respawn();
+            return; // 衝突したら座標更新をしない
+        }
+        // ----------------------------------------------------
 
         if (Conductor.Instance == null) return;
         double songPosition = Conductor.Instance.GetSongPosition();
@@ -260,10 +248,47 @@ public class MyPlayerMove : MonoBehaviour
         isGrounded = hit.collider != null;
     }
 
+    // --- 修正: 前方に壁があるかチェックする機能（頭のみ） ---
+    private bool CheckWallCollision()
+    {
+        Vector2 center = boxCollider.bounds.center;
+        float extentsY = boxCollider.bounds.extents.y;
+        float extentsX = boxCollider.bounds.extents.x;
+
+        // 地面や段差の継ぎ目による誤判定を防ぐため、頭（少し上）の1点のみからチェックします
+        Vector2 top = new Vector2(center.x, center.y + extentsY * 0.8f);
+
+        // 前方にチェックする距離（プレイヤーの半分幅＋ほんの少し）
+        float distance = extentsX + 0.1f;
+
+        // 頭の高さの線が壁に当たっていれば true を返す
+        if (Physics2D.Raycast(top, Vector2.right, distance, groundLayer))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Vector2 attackPos = (Vector2)transform.position + attackOffset;
         Gizmos.DrawWireSphere(attackPos, attackRadius);
+
+        // エディタ上で壁判定の線（青色）を見えるようにする
+        CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
+        if (col != null)
+        {
+            Gizmos.color = Color.blue;
+            Vector2 center = col.bounds.center;
+            float extentsY = col.bounds.extents.y;
+            float extentsX = col.bounds.extents.x;
+            // 頭の線のみ描画
+            Vector2 top = new Vector2(center.x, center.y + extentsY * 0.8f);
+            float distance = extentsX + 0.1f;
+            
+            Gizmos.DrawLine(top, top + Vector2.right * distance);
+        }
     }
 }
